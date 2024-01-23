@@ -1,34 +1,53 @@
-def celsius_to_fahrenheit(celsius):  # this function converts Celsius values to Fahrenheit.
+import tkinter as tk
+
+
+def celsius_to_fahrenheit(celsius):
     return celsius * 9 / 5 + 32
 
 
-def fahrenheit_to_celsius(fahrenheit):  # this function converts Fahrenheit values to Celsius.
+def fahrenheit_to_celsius(fahrenheit):
     return (fahrenheit - 32) * 5 / 9
 
 
-def main():  # The main function serves to prompt the user for an input.
-    while True:  # this statement will loop the function.
-        choice = input('Fahrenheit (1) or Celsius (2)?')  # user's input is recorded as "choice".
-        if choice == '1':  # the value of choice is used to determine what method to pursue.
-            fahrenheit = float(input('enter a temperature in Fahrenheit'))  # A value is assigned to "fahrenheit".
-            celsius = fahrenheit_to_celsius(fahrenheit)  # variable is assigned a value from the converting function.
-            print(celsius)  # value assigned to variable is printed to console.
-        elif choice == '2':  # the value of choice is used to determine what method to pursue.
-            celsius = float(input('enter a temperature in Celsius'))  # A value is assigned to "celsius".
-            fahrenheit = celsius_to_fahrenheit(celsius)  # variable is assigned a value from the converting function.
-            print(fahrenheit)  # value assigned to variable is printed to console.
-        else:  # if user input is not 1 or 2 the program prints an invalid message and prompts again.
-            print('Invalid, try again.')  # Invalid message is printed to console.
-            continue
-        while True:
-            exit_prompt = input('Would you like to generate another result (y/n)')  # an exit method when user is done.
-            if exit_prompt.lower() == 'y':
-                break  # program breaks from loop, continuing the program.
-            elif exit_prompt.lower() == 'n':  # if the user inputs 'n' the program will stop.
-                return  # program stops by exiting main function.
-            else:
-                print('Invalid, try again.')
+def convert_temperature():
+    choice = choice_var.get()
+    temperature = float(entry.get())
+
+    if choice == 1:
+        result_label.config(text=f"{fahrenheit_to_celsius(temperature):.2f} °C")
+    elif choice == 2:
+        result_label.config(text=f"{celsius_to_fahrenheit(temperature):.2f} °F")
 
 
-if __name__ == '__main__':
-    main()
+# Create the main window
+window = tk.Tk()
+window.title("Temperature Converter")
+
+# Create a variable to store the choice (Fahrenheit = 1, Celsius = 2)
+choice_var = tk.IntVar()
+choice_var.set(1)  # Default choice is Fahrenheit
+
+# Creates buttons for selecting Celsius or Fahrenheit
+celsius_radio = tk.Radiobutton(window, text="Celsius", variable=choice_var, value=2)
+fahrenheit_radio = tk.Radiobutton(window, text="Fahrenheit", variable=choice_var, value=1)
+
+# Creates a field for temperature input
+entry_label = tk.Label(window, text="Enter Temperature:")
+entry = tk.Entry(window)
+
+# Creates a button that initiates the conversion
+convert_button = tk.Button(window, text="Convert", command=convert_temperature)
+
+# Creates a label to display the result
+result_label = tk.Label(window, text="", font=("Helvetica", 14))
+
+# Put the widgets in the window
+celsius_radio.pack()
+fahrenheit_radio.pack()
+entry_label.pack()
+entry.pack()
+convert_button.pack()
+result_label.pack()
+
+# Start the GUI main loop
+window.mainloop()
