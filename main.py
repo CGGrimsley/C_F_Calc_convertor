@@ -27,23 +27,30 @@ def fahrenheit_to_celsius(fahrenheit):
 
 def convert_temperature():
     choice = choice_var.get()
-    temperature = float(entry.get())
+    temperatures = entry.get().split(',')  # allows user to enter an array seperated by commas
 
-    if choice == 1:
-        result_label.config(text=f"{fahrenheit_to_celsius(temperature):.2f} °C")
-    elif choice == 2:
-        result_label.config(text=f"{celsius_to_fahrenheit(temperature):.2f} °F")
-    elif choice == 3:
-        result_label.config(text=f"{fahrenheit_to_kelvin(temperature):.2f} °K")
-    elif choice == 4:
-        result_label.config(text=f"{celsius_to_kelvin(temperature):.2f} °K")
-    elif choice == 5:
-        result_label.config(text=f"{kelvin_to_celsius(temperature):.2f} °C")
-    elif choice == 6:
-        result_label.config(text=f"{kelvin_to_fahrenheit(temperature):.2f} °F")
+    conversion_map = {  # map so that we can reduce repetition
+        1: (fahrenheit_to_celsius, "{0.2f} °F is {1:.2f} °C"),
+        2: (celsius_to_fahrenheit, "{0.2f} °C is {1:.2f} °F"),
+        3: (fahrenheit_to_kelvin, "{0.2f} °F is {1:.2f} °K"),
+        4: (celsius_to_kelvin, "{0.2f} °C is {1:.2f} °K"),
+        5: (kelvin_to_celsius, "{0.2f} °K is {1:.2f} °C"),
+        6: (kelvin_to_fahrenheit, "{0.2f} °K is {1:.2f} °F")
+    }
+
+    results = []
+    for temp_str in temperatures:
+        try:
+            temperature = float(temp_str.strip())
+            conversion_function, format_string = conversion_map[choice]
+            converted = conversion_function(temperature)
+            results.append(format_string.format(temperature, converted))
+        except ValueError:
+            results.append("Invalid, try again")
+
+    result_label.config(text="\n".join(results))
 
 
-# Create the main window
 window = tk.Tk()
 window.title("Temperature Converter")
 
@@ -80,5 +87,4 @@ entry.pack()
 convert_button.pack()
 result_label.pack()
 
-# Start the GUI main loop
 window.mainloop()
